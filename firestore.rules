@@ -1,0 +1,27 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /pedidos/{uuid} {
+      allow read: if true;
+
+      // Crear y reenviar (sobrescribir) un pedido con datos válidos
+      allow create, update: if esPedidoValido(request.resource.data);
+
+      // Los pedidos enviados no se borran desde la app
+      allow delete: if false;
+    }
+
+    function esPedidoValido(pedido) {
+      return pedido.keys().hasAll(['producto', 'cantidad', 'fechaRegistro', 'recibidoEn'])
+          && pedido.keys().hasOnly(['producto', 'cantidad', 'fechaRegistro', 'recibidoEn'])
+          && pedido.producto is string
+          && pedido.producto.size() > 0
+          && pedido.producto.size() <= 120
+          && pedido.cantidad is int
+          && pedido.cantidad > 0
+          && pedido.fechaRegistro is timestamp
+          && pedido.recibidoEn == request.time;   // solo se acepta la hora del servidor
+    }
+  }
+}

@@ -1,0 +1,20 @@
+*.iml
+.gradle
+.kotlin
+/.idea
+local.properties
+.DS_Store
+.externalNativeBuild
+.cxx
+/captures
+
+# Compilados (el APK se entrega por separado)
+build/
+*.apk
+*.aab
+
+# Configuración privada de Firebase (cada uno descarga la suya)
+google-services.json
+
+# Notas personales de la demostración
+GUION_DEMO.md
